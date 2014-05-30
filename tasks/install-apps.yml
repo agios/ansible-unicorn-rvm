@@ -1,0 +1,17 @@
+---
+- name: Install ruby
+  command: "{{ rvm_exe }} install {{ item.ruby_version }} creates={{ rvm_root }}/rubies/{{ item.ruby_version }}"
+  with_items: rails_apps
+
+- name: Install unicorn gem
+  command: "{{ rvm_exe }} {{ item.ruby_version }} do gem install unicorn creates={{ rvm_root }}/wrappers/{{ item.ruby_version }}"
+  with_items: rails_apps
+
+- name: Create application rvm aliases
+  command: "{{ rvm_exe }} alias create {{ item.name }} {{ item.ruby_version }}@{{ item.name }} creates={{ rvm_root }}/wrappers/{{ item.name }}"
+  with_items: rails_apps
+
+- name: Generate application configurations
+  template: src=unicorn-app.j2 dest=/etc/unicorn/{{ item.name }}.conf owner=root group=root mode=0644
+  with_items: rails_apps
+

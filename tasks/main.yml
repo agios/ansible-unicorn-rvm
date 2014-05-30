@@ -1,0 +1,12 @@
+---
+- name: Install unicorn init script
+  copy: src=etc/init.d/unicorn dest=/etc/init.d/unicorn owner=root group=root mode=0755
+
+- name: Create unicorn config directory
+  file: dest=/etc/unicorn state=directory owner=root group=root mode=0755
+
+- include: install-apps.yml
+
+- name: Enable unicorn service
+  service: name=unicorn enabled=yes
+

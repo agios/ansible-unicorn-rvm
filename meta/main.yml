@@ -1,0 +1,33 @@
+---
+galaxy_info:
+  author: Alexandros Giouzenis
+  description: Ansible Unicorn installation with RVM and multiple application support
+  license: MIT
+  min_ansible_version: 1.2
+  platforms:
+  - name: EL
+    versions:
+    - all
+  - name: Fedora
+    versions:
+    - all
+  - name: opensuse
+    versions:
+    - all
+  - name: Ubuntu
+    versions:
+    - all
+  - name: SLES
+    versions:
+    - all
+  - name: GenericLinux
+    versions:
+    - any
+  - name: Debian
+    versions:
+    - all
+  categories:
+  - system
+  - web
+dependencies: []
+
