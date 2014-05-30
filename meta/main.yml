@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Alexandros Giouzenis
-  description: Ansible Unicorn installation with RVM and multiple application support
+  description: Unicorn installation with RVM and multiple application support
   license: MIT
   min_ansible_version: 1.2
   platforms:
