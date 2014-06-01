@@ -1,14 +1,22 @@
 ---
+- name: Check rubies
+  shell: ls {{ rvm_root }}/rubies/{{ item.ruby_version }}*
+  register: ruby_versions
+  ignore_errors: True
+  changed_when: False
+  with_items: rails_apps
+
 - name: Install ruby
-  command: "{{ rvm_exe }} install {{ item.ruby_version }} creates={{ rvm_root }}/rubies/{{ item.ruby_version }}"
+  command: "{{ rvm_exe }} install {{ item.1.ruby_version }}"
+  when: ruby_versions.results[item.0] | failed
+  with_indexed_items: rails_apps
+
+- name: Create application rvm aliases
+  command: "{{ rvm_exe }} alias create {{ item.name }} {{ item.ruby_version }}@{{ item.name }} --create creates={{ rvm_root }}/wrappers/{{ item.name }}"
   with_items: rails_apps
 
 - name: Install unicorn gem
-  command: "{{ rvm_exe }} {{ item.ruby_version }} do gem install unicorn creates={{ rvm_root }}/wrappers/{{ item.ruby_version }}"
-  with_items: rails_apps
-
-- name: Create application rvm aliases
-  command: "{{ rvm_exe }} alias create {{ item.name }} {{ item.ruby_version }}@{{ item.name }} creates={{ rvm_root }}/wrappers/{{ item.name }}"
+  command: "{{ rvm_exe }} {{ item.name }} do gem install unicorn creates={{ rvm_root }}/wrappers/{{ item.name }}/unicorn_rails"
   with_items: rails_apps
 
 - name: Generate application configurations
