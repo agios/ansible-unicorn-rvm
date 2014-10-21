@@ -23,3 +23,18 @@
   template: src=unicorn-app.j2 dest=/etc/unicorn/{{ item.name }}.conf owner=root group=root mode=0644
   with_items: rails_apps
 
+- name: Generate application config directory
+  file: dest={{ item.config | default((item.root | default('/var/www/' + item.name + '/shared')) + '/config')}} owner=www-data group=www-data mode=0700 state=directory
+  when: (item.db is defined) or (item.secrets is defined)
+  with_items: rails_apps
+
+- name: Generate application database.yml
+  template: src=database.yml.j2 dest={{ item.config | default((item.root | default('/var/www/' + item.name + '/shared')) + '/config')}}/database.yml owner=www-data group=www-data mode=0600
+  when: item.db is defined
+  with_items: rails_apps
+
+- name: Generate application secrets.yml
+  template: src=secrets.yml.j2 dest={{ item.config | default((item.root | default('/var/www/' + item.name + '/shared')) + '/config')}}/secrets.yml owner=www-data group=www-data mode=0600
+  when: item.secrets is defined
+  with_items: rails_apps
+

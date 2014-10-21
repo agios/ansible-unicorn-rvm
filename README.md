@@ -23,6 +23,21 @@ Role Variables
     -   `env` defaults to `production`
     -   `root` defaults to `/var/www/{{ name }}/current` (Capistrano
         compatible)
+    -   `config` is used for `db` and `secrets`, defaults to
+        `{{ root }}/config` if root is specified, otherwise to
+        `/var/www/{{ name }}/shared/config`
+    -   `db` is a dict for generating a `database.yml` file, with
+        options:
+
+        -   `adapter` defaults to `postgresql`
+        -   `host` defaults to `localhost`
+        -   `database` defaults to app name
+        -   `username` defaults to app name
+        -   `password` defaults to app name
+        -   `pool` defaults to `5`
+        -   `timeout` defaults to `5000`
+    -   `secrets` is a dict and all its keys are converted to
+        secrets.yml
 
 Example Playbook
 ----------------
@@ -37,6 +52,12 @@ The role could be included in a playbook as follows:
       rails_apps:
         - { name: 'my_app1', ruby_version: 'ruby-1.9.3' }
         - { name: 'my_app2', ruby_version: 'ruby-2.1.1', root: '/var/test_apps/app2', env: staging }
+        - name: 'my_app3'
+          ruby_version: 'ruby-2.1.1'
+          db:
+            password: topsecret
+          secrets:
+            secret_key_base: SuperSecretHexString
 ```
 
 If the init script is called without any config parameters,
@@ -54,6 +75,9 @@ Notes
 This role does not deploy the actual application, it assumes that this
 will be done in another role or using a deployment tool such as
 [Capistrano](https://github.com/capistrano/capistrano).
+
+It is advised to store the keys for db and secrets in an ansible vault
+file
 
 License
 -------

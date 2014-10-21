@@ -1,0 +1,9 @@
+{{ item.env | default('production') }}:
+  adapter: {{ item.db.adapter | default('postgresql') }}
+  host: {{ item.db.host | default('localhost') }}
+  database: {{ item.db.database | default(item.name) }}
+  username: {{ item.db.username | default(item.name) }}
+  password: {{ item.db.password | default(item.name) }}
+  pool: {{ item.db.pool | default('5') }}
+  timeout: {{ item.db.timeout | default('5000') }}
+
