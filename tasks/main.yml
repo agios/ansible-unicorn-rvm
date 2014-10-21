@@ -5,6 +5,9 @@
 - name: Create unicorn config directory
   file: dest=/etc/unicorn state=directory owner=root group=root mode=0755
 
+- name: Create unicorn default configuration
+  copy: src=etc/unicorn/unicorn.rb dest=/etc/unicorn/unicorn.rb owner=root group=root mode=0755
+
 - include: install-apps.yml
 
 - name: Enable unicorn service

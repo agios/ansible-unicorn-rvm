@@ -96,7 +96,13 @@ setup ()
   export OLD_PID="$PID.oldbin"
   export RAILS_ENV=${RAILS_ENV}
 
-  CMD=( "$UNICORN" -c "${RAILS_ROOT}/config/unicorn.rb" -D )
+  if
+    [[ -f "${RAILS_ROOT}/config/unicorn.rb" ]]
+  then
+    CMD=( "$UNICORN" -c "${RAILS_ROOT}/config/unicorn.rb" -D )
+  else
+    CMD=( "$UNICORN" -c "/etc/unicorn/unicorn.rb" -D )
+  fi
 
   typeset __owner="$(stat -c "%U" "${RAILS_ROOT}")"
   if
@@ -203,7 +209,7 @@ start_stop ()
       . "$CONFIG" || return $?
       cmd "$1" || return $?
     done
-   fi
+  fi
 }
 
 start_stop "$@"
