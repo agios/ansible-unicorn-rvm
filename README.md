@@ -76,8 +76,17 @@ This role does not deploy the actual application, it assumes that this
 will be done in another role or using a deployment tool such as
 [Capistrano](https://github.com/capistrano/capistrano).
 
-It is advised to store the keys for db and secrets in an ansible vault
-file
+However you deploy, keep in mind that this setup expects each
+application to use an rvm gemset with the name of the application.
+
+So for example, for a Capistrano 3 deployment of an app called 'my_app'
+under ruby 2.1.1, you should `require 'capistrano/rvm'` and set the following
+in your Capistrano configuration:
+
+`set :rvm_ruby_version, '2.1.1@my_app'`
+
+If you use this role to generate database.yml and secrets.yml, it is advised
+to store the keys in an ansible vault file
 
 License
 -------
